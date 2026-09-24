@@ -1025,8 +1025,7 @@ def build_feature_waterfall(feature_dict, lr_obj, scaler_obj):
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         xaxis=dict(
-            title="← Reduces Default Risk (Safe) | Increases Default Risk (Risky) →",
-            titlefont=dict(size=11, color="#94A3B8"),
+            title=dict(text="← Reduces Default Risk (Safe) | Increases Default Risk (Risky) →", font=dict(size=11, color="#94A3B8")),
             gridcolor="rgba(255,255,255,0.06)",
             zerolinecolor="rgba(255,255,255,0.2)",
             tickfont=dict(color="#94A3B8")
@@ -1859,11 +1858,10 @@ def render_model_comparison_page():
             bar_fig.add_trace(go.Bar(x=metric_names, y=dt_values, name='Decision Tree', marker_color='#10B981', text=[f"{v:.1f}%" for v in dt_values], textposition='auto'))
 
             bar_fig.update_layout(
-                title="<b>Key Metric Comparison Across All 4 Models (%)</b>",
+                title=dict(text="<b>Key Metric Comparison Across All 4 Models (%)</b>", font=dict(color="#FFFFFF", size=14)),
                 barmode='group',
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                titlefont=dict(color="#FFFFFF", size=14),
                 xaxis=dict(tickfont=dict(color="#E2E8F0")),
                 yaxis=dict(title="Score (%)", range=[0, 115], gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8")),
                 legend=dict(font=dict(color="#E2E8F0"), orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
@@ -1890,9 +1888,8 @@ def render_model_comparison_page():
                     radialaxis=dict(visible=True, range=[0, 1.0], tickfont=dict(color="#94A3B8", size=9), gridcolor="rgba(255,255,255,0.1)"),
                     angularaxis=dict(tickfont=dict(color="#E2E8F0", size=10), gridcolor="rgba(255,255,255,0.1)")
                 ),
-                title="<b>4-Model Capability Radar</b>",
+                title=dict(text="<b>4-Model Capability Radar</b>", font=dict(color="#FFFFFF", size=14)),
                 paper_bgcolor="rgba(0,0,0,0)",
-                titlefont=dict(color="#FFFFFF", size=14),
                 legend=dict(font=dict(color="#E2E8F0")),
                 height=380,
                 margin=dict(l=25, r=25, t=40, b=20)
@@ -1916,7 +1913,7 @@ def render_model_comparison_page():
             ]
             fig_cm_rf = px.imshow(rf_cm_data, labels=dict(x="Predicted", y="Actual"), x=['Safe (0)', 'Default (1)'], y=['Safe (0)', 'Default (1)'], color_continuous_scale="Purples", title=f"<b>Random Forest ({rf_chars.get('specs', {}).get('Total Estimators', 'Ensemble')})</b>")
             fig_cm_rf.update_traces(text=rf_cm_text, texttemplate="%{text}")
-            fig_cm_rf.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", titlefont=dict(color="#A78BFA", size=13), height=280, coloraxis_showscale=False, margin=dict(l=10, r=10, t=35, b=20))
+            fig_cm_rf.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", title=dict(font=dict(color="#A78BFA", size=13)), height=280, coloraxis_showscale=False, margin=dict(l=10, r=10, t=35, b=20))
             st.plotly_chart(fig_cm_rf, use_container_width=True)
 
         with cm_row1_c2:
@@ -1930,7 +1927,7 @@ def render_model_comparison_page():
             ]
             fig_cm_knn = px.imshow(knn_cm_data, labels=dict(x="Predicted", y="Actual"), x=['Safe (0)', 'Default (1)'], y=['Safe (0)', 'Default (1)'], color_continuous_scale="YlOrBr", title=f"<b>K-Nearest Neighbors (K={knn_model.n_neighbors})</b>")
             fig_cm_knn.update_traces(text=knn_cm_text, texttemplate="%{text}")
-            fig_cm_knn.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", titlefont=dict(color="#FBBF24", size=13), height=280, coloraxis_showscale=False, margin=dict(l=10, r=10, t=35, b=20))
+            fig_cm_knn.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", title=dict(font=dict(color="#FBBF24", size=13)), height=280, coloraxis_showscale=False, margin=dict(l=10, r=10, t=35, b=20))
             st.plotly_chart(fig_cm_knn, use_container_width=True)
 
         cm_row2_c1, cm_row2_c2 = st.columns(2)
@@ -1945,7 +1942,7 @@ def render_model_comparison_page():
             ]
             fig_cm_lr = px.imshow(lr_cm_data, labels=dict(x="Predicted", y="Actual"), x=['Safe (0)', 'Default (1)'], y=['Safe (0)', 'Default (1)'], color_continuous_scale="Blues", title=f"<b>Logistic Regression ({lr_chars.get('specs', {}).get('Fitted Coefficients', 'Linear')})</b>")
             fig_cm_lr.update_traces(text=lr_cm_text, texttemplate="%{text}")
-            fig_cm_lr.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", titlefont=dict(color="#60A5FA", size=13), height=280, coloraxis_showscale=False, margin=dict(l=10, r=10, t=35, b=20))
+            fig_cm_lr.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", title=dict(font=dict(color="#60A5FA", size=13)), height=280, coloraxis_showscale=False, margin=dict(l=10, r=10, t=35, b=20))
             st.plotly_chart(fig_cm_lr, use_container_width=True)
 
         with cm_row2_c2:
@@ -1959,7 +1956,7 @@ def render_model_comparison_page():
             ]
             fig_cm_dt = px.imshow(dt_cm_data, labels=dict(x="Predicted", y="Actual"), x=['Safe (0)', 'Default (1)'], y=['Safe (0)', 'Default (1)'], color_continuous_scale="Greens", title=f"<b>Decision Tree ({dt_chars.get('specs', {}).get('Actual Depth', 'Depth=2')})</b>")
             fig_cm_dt.update_traces(text=dt_cm_text, texttemplate="%{text}")
-            fig_cm_dt.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", titlefont=dict(color="#34D399", size=13), height=280, coloraxis_showscale=False, margin=dict(l=10, r=10, t=35, b=20))
+            fig_cm_dt.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", title=dict(font=dict(color="#34D399", size=13)), height=280, coloraxis_showscale=False, margin=dict(l=10, r=10, t=35, b=20))
             st.plotly_chart(fig_cm_dt, use_container_width=True)
 
         st.markdown(f"""
@@ -1989,10 +1986,9 @@ def render_model_comparison_page():
         roc_fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode='lines', name='Random Chance (AUC = 0.5000)', line=dict(color='#64748B', width=1.5, dash='dash')))
 
         roc_fig.update_layout(
-            title="<b>Live 4-Model Empirical ROC Curves (True Positive Rate vs False Positive Rate)</b>",
+            title=dict(text="<b>Live 4-Model Empirical ROC Curves (True Positive Rate vs False Positive Rate)</b>", font=dict(color="#FFFFFF", size=14)),
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            titlefont=dict(color="#FFFFFF", size=14),
             xaxis=dict(title="False Positive Rate (1 - Specificity)", gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8"), range=[0, 1.02]),
             yaxis=dict(title="True Positive Rate (Recall / Sensitivity)", gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8"), range=[0, 1.02]),
             legend=dict(font=dict(color="#E2E8F0"), bgcolor="rgba(15, 23, 42, 0.8)"),
@@ -2327,12 +2323,11 @@ def render_batch_analytics_page():
             hist_fig.add_trace(go.Histogram(x=df_results["DT_Risk_%"], name="Decision Tree", marker_color="#10B981", opacity=0.7, nbinsx=25))
             hist_fig.update_layout(
                 barmode='overlay',
-                title="<b>Default Risk Probability Distribution Comparison</b>",
+                title=dict(text="<b>Default Risk Probability Distribution Comparison</b>", font=dict(color="#FFFFFF", size=14)),
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
                 xaxis=dict(title="Default Probability (%)", gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8")),
                 yaxis=dict(gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8")),
-                titlefont=dict(color="#FFFFFF", size=14),
                 legend=dict(font=dict(color="#E2E8F0")),
                 height=320,
                 margin=dict(l=10, r=10, t=40, b=20)
@@ -2359,7 +2354,7 @@ def render_batch_analytics_page():
             pie_fig.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                titlefont=dict(color="#FFFFFF", size=14),
+                title=dict(font=dict(color="#FFFFFF", size=14)),
                 legend=dict(font=dict(color="#E2E8F0")),
                 height=320,
                 margin=dict(l=10, r=10, t=40, b=20)
@@ -2445,7 +2440,7 @@ def render_eda_page():
             fig_age.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                titlefont=dict(color="#FFFFFF", size=13),
+                title=dict(font=dict(color="#FFFFFF", size=13)),
                 xaxis=dict(gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8")),
                 yaxis=dict(gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8")),
                 legend=dict(font=dict(color="#E2E8F0")),
@@ -2467,7 +2462,7 @@ def render_eda_page():
             fig_ir.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                titlefont=dict(color="#FFFFFF", size=13),
+                title=dict(font=dict(color="#FFFFFF", size=13)),
                 xaxis=dict(gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8")),
                 yaxis=dict(gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8")),
                 legend=dict(font=dict(color="#E2E8F0")),
@@ -2493,7 +2488,7 @@ def render_eda_page():
         fig_corr.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            titlefont=dict(color="#FFFFFF", size=14),
+            title=dict(font=dict(color="#FFFFFF", size=14)),
             xaxis=dict(tickfont=dict(color="#E2E8F0", size=10)),
             yaxis=dict(tickfont=dict(color="#E2E8F0", size=10)),
             height=500,
@@ -2518,7 +2513,7 @@ def render_eda_page():
         fig_scatter.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            titlefont=dict(color="#FFFFFF", size=14),
+            title=dict(font=dict(color="#FFFFFF", size=14)),
             xaxis=dict(gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8"), title="Annual Income ($)"),
             yaxis=dict(gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8"), title="Requested Loan Amount ($)"),
             legend=dict(font=dict(color="#E2E8F0")),
@@ -2655,10 +2650,9 @@ def render_model_diagnostics_page():
                 marker=dict(color=bar_colors)
             ))
             weight_fig.update_layout(
-                title="<b>Feature Importance (Standardized Betas)</b>",
+                title=dict(text="<b>Feature Importance (Standardized Betas)</b>", font=dict(color="#FFFFFF", size=14)),
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                titlefont=dict(color="#FFFFFF", size=14),
                 xaxis=dict(gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94A3B8"), title="Standardized Coefficient"),
                 yaxis=dict(tickfont=dict(color="#E2E8F0")),
                 height=380,
@@ -2774,7 +2768,7 @@ def render_affordability_calculator_page():
         breakdown_fig.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            titlefont=dict(color="#FFFFFF", size=13),
+            title=dict(font=dict(color="#FFFFFF", size=13)),
             legend=dict(font=dict(color="#E2E8F0")),
             height=260,
             margin=dict(l=10, r=10, t=35, b=10)

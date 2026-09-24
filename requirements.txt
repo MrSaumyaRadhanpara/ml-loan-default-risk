@@ -6,7 +6,7 @@ joblib>=1.4.0
 
 # Streamlit UI & Interactive Visualizations
 streamlit>=1.40.0
-plotly>=5.24.0
+plotly>=5.20.0,<6.0.0
 
 # Optional API Backend (FastAPI / Uvicorn)
 fastapi>=0.110.0
