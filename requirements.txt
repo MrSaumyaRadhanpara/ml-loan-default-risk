@@ -1,0 +1,13 @@
+# Core ML & Data Processing
+numpy>=1.26.0
+pandas>=2.2.0
+scikit-learn>=1.5.0
+joblib>=1.4.0
+
+# Streamlit UI & Interactive Visualizations
+streamlit>=1.40.0
+plotly>=5.24.0
+
+# Optional API Backend (FastAPI / Uvicorn)
+fastapi>=0.110.0
+uvicorn>=0.28.0
