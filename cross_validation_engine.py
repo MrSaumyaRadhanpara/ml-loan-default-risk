@@ -13,8 +13,9 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 
-CV_RESULTS_FILE = Path("cross_validation_results.json")
-CV_MODELS_FILE = Path("models/cv_trained_models.pkl")
+BASE_DIR = Path(__file__).resolve().parent
+CV_RESULTS_FILE = BASE_DIR / "cross_validation_results.json"
+CV_MODELS_FILE = BASE_DIR / "models" / "cv_trained_models.pkl"
 
 FEATURE_NAMES = [
     "Age", "Income", "LoanAmount", "CreditScore", "MonthsEmployed",
@@ -24,24 +25,36 @@ FEATURE_NAMES = [
 
 def load_cross_validation_results():
     """Loads extracted 10-fold cross-validation results from JSON dynamically."""
-    if not CV_RESULTS_FILE.exists():
-        return None
-    try:
-        with open(CV_RESULTS_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Error loading CV results: {e}")
-        return None
+    candidate_paths = [CV_RESULTS_FILE, Path("cross_validation_results.json")]
+    for p in candidate_paths:
+        if p.exists():
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception as e:
+                print(f"Error loading CV results from {p}: {e}")
+    return None
 
 def load_cv_models():
     """Loads all 10 trained cross-validated model estimators per architecture."""
-    if not CV_MODELS_FILE.exists():
-        return {}
-    try:
-        return joblib.load(CV_MODELS_FILE)
-    except Exception as e:
-        print(f"Error loading CV models: {e}")
-        return {}
+    candidate_paths = [
+        CV_MODELS_FILE,
+        Path("models/cv_trained_models.pkl"),
+        BASE_DIR / "cv_trained_models.pkl",
+        Path("cv_trained_models.pkl")
+    ]
+    for p in candidate_paths:
+        if p.exists():
+            try:
+                return joblib.load(p)
+            except Exception:
+                try:
+                    import pickle
+                    with open(p, "rb") as f:
+                        return pickle.load(f)
+                except Exception as e:
+                    print(f"Error loading CV models from {p}: {e}")
+    return {}
 
 def predict_applicant_cv(model_name, applicant_dict, cv_models=None, fallback_models=None, scaler=None):
     """

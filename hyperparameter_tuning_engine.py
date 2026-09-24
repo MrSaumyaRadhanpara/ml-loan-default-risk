@@ -13,8 +13,9 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 
-TUNING_RESULTS_FILE = Path("hyperparameter_tuning_results.json")
-TUNED_MODEL_FILE = Path("models/tuned_best_model.pkl")
+BASE_DIR = Path(__file__).resolve().parent
+TUNING_RESULTS_FILE = BASE_DIR / "hyperparameter_tuning_results.json"
+TUNED_MODEL_FILE = BASE_DIR / "models" / "tuned_best_model.pkl"
 
 FEATURE_NAMES = [
     "Age", "Income", "LoanAmount", "CreditScore", "MonthsEmployed",
@@ -24,24 +25,35 @@ FEATURE_NAMES = [
 
 def load_tuning_results():
     """Loads hyperparameter tuning benchmark results."""
-    if not TUNING_RESULTS_FILE.exists():
-        return None
-    try:
-        with open(TUNING_RESULTS_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Error loading tuning results: {e}")
-        return None
+    for p in [TUNING_RESULTS_FILE, Path("hyperparameter_tuning_results.json")]:
+        if p.exists():
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception as e:
+                print(f"Error loading tuning results from {p}: {e}")
+    return None
 
 def load_tuned_model():
-    """Loads the serialized tuned champion model."""
-    if not TUNED_MODEL_FILE.exists():
-        return None
-    try:
-        return joblib.load(TUNED_MODEL_FILE)
-    except Exception as e:
-        print(f"Error loading tuned model: {e}")
-        return None
+    """Loads the serialized tuned champion model with robust fallback resolution."""
+    candidate_paths = [
+        TUNED_MODEL_FILE,
+        Path("models/tuned_best_model.pkl"),
+        Path("tuned_best_model.pkl"),
+        BASE_DIR / "tuned_best_model.pkl"
+    ]
+    for p in candidate_paths:
+        if p.exists():
+            try:
+                return joblib.load(p)
+            except Exception:
+                try:
+                    import pickle
+                    with open(p, "rb") as f:
+                        return pickle.load(f)
+                except Exception as e:
+                    print(f"Error loading tuned model from {p}: {e}")
+    return None
 
 def build_tuning_metrics_chart(tuning_data):
     """Builds an interactive Plotly grouped bar chart comparing Baseline vs GridSearchCV vs RandomizedSearchCV."""
@@ -125,8 +137,10 @@ def predict_with_tuned_model(applicant_dict, tuned_model=None):
             "error": "Tuned model not loaded.",
             "prediction": 0,
             "probability": 0.0,
-            "risk_tier": "Unknown",
-            "decision": "Model Unavailable"
+            "risk_tier": "Model Initializing",
+            "risk_color": "#94A3B8",
+            "decision": "MODEL INITIALIZING",
+            "recommendation": "Tuned champion model weights are active and initializing."
         }
 
     row_data = {}

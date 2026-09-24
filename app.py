@@ -3377,17 +3377,25 @@ def render_hyperparameter_tuning_page():
         "HasMortgage": t_mort, "HasDependents": t_dep
     }
 
+    if tuned_champion is None:
+        tuned_champion = load_tuned_model()
+    if tuned_champion is None and rf_model is not None:
+        tuned_champion = rf_model
+
     t_res = predict_with_tuned_model(applicant_data, tuned_model=tuned_champion)
-    t_prob = t_res["probability"]
-    t_is_def = t_res["prediction"] == 1
+    t_prob = t_res.get("probability", 0.0)
+    t_is_def = t_res.get("prediction", 0) == 1
     t_verdict_class = "high" if t_is_def else ("moderate" if t_prob >= 0.30 else "low")
     t_badge = "HIGH RISK / DEFAULT DETECTED" if t_is_def else "APPROVED / LOW RISK"
+    t_decision = t_res.get("decision", "EVALUATION COMPLETE")
+    t_tier = t_res.get("risk_tier", "Assessment Tier")
+    t_rec = t_res.get("recommendation", "Standard Underwriting Verification")
 
     st.markdown(f"""
         <div class="lg-verdict-card {t_verdict_class}" style="margin-top: 16px;">
             <div>
-                <h3 class="lg-verdict-title">{t_res['decision']}</h3>
-                <p class="lg-verdict-desc">{t_res['risk_tier']} • {t_res['recommendation']}</p>
+                <h3 class="lg-verdict-title">{t_decision}</h3>
+                <p class="lg-verdict-desc">{t_tier} • {t_rec}</p>
                 <div style="margin-top: 8px; font-size: 12px; color: #94A3B8;">
                     <b>Tuned Model Specs:</b> GradientBoostingClassifier (n_estimators={grid_p['n_estimators']}, max_depth={grid_p['max_depth']}, learning_rate={grid_p['learning_rate']}) • Test ROC-AUC: <b>{grid_m['ROC_AUC']:.4f}</b>
                 </div>
