@@ -354,6 +354,7 @@ def inject_custom_css():
         }
 
         /* Modern Card Containers */
+        .lg-card:empty { display: none !important; }
         .lg-card {
             background: rgba(17, 24, 39, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -792,7 +793,8 @@ def inject_custom_css():
             }
 
             /* Cards Mobile Adaptation */
-            .lg-card {
+            .lg-card:empty { display: none !important; }
+        .lg-card {
                 padding: 14px 14px !important;
                 border-radius: 12px !important;
                 margin-bottom: 14px !important;
@@ -1456,7 +1458,6 @@ def render_single_prediction_page():
     ])
 
     with tab_rf_explain:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 🌳 Random Forest: Gini Importance & Ensemble Vote Breakdown")
         st.markdown("The 300-tree ensemble combines randomized tree voters to deliver industry-leading default recall (63.0%) and ROC-AUC (0.7481).")
         
@@ -1480,10 +1481,8 @@ def render_single_prediction_page():
                     </div>
                 </div>
             """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with tab_knn_explain:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 📍 K-Nearest Neighbors: Local Instance Memory & Neighborhood Evaluation")
         st.markdown("KNN evaluates this applicant by locating the **8 most similar historical borrower records** in 11-dimensional standardized Euclidean space.")
         
@@ -1507,18 +1506,14 @@ def render_single_prediction_page():
                     </div>
                 </div>
             """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with tab_lr_explain:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 🔬 Logistic Regression: Log-Odds Factor Contributions")
         st.markdown("How each individual applicant attribute shifts the continuous log-odds of loan default relative to population averages.")
         waterfall_fig = build_feature_waterfall(feature_dict, lr_model, scaler)
         st.plotly_chart(waterfall_fig, use_container_width=True, config={'displayModeBar': False})
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with tab_dt_explain:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 🌲 Decision Tree: Exact Split Rule Evaluation")
         st.markdown("The balanced Decision Tree splits applicants along clear economic threshold rules on **Age**, **Interest Rate**, and **Income**.")
         steps, outcome, p_class, prob_val = evaluate_decision_tree_path(feature_dict)
@@ -1534,10 +1529,8 @@ def render_single_prediction_page():
                 <b>Final Tree Classification:</b> {outcome}
             </div>
         """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with tab_underwriter:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 📑 Automated Institutional Policy Recommendations")
         
         recs = []
@@ -1568,10 +1561,8 @@ def render_single_prediction_page():
                     <div>{text}</div>
                 </div>
             """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with tab_whatif:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 🎛️ Live Sensitivity Testing (What-If Analysis)")
         st.markdown("Simulate how proactive changes to the loan structure impact default risk across **all 4 models simultaneously**.")
         
@@ -1631,7 +1622,6 @@ def render_single_prediction_page():
                     <div style="font-size: 11px; color: {'#EF4444' if dt_diff > 0 else '#10B981'};">({'+' if dt_diff > 0 else ''}{dt_diff:.1f}%)</div>
                 </div>
             """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
 # ============================================================
 # 6. PAGE 2: MODEL PERFORMANCE & HEAD-TO-HEAD BENCHMARK
@@ -1841,7 +1831,6 @@ def render_model_comparison_page():
     ])
 
     with comp_tab1:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         col_c1, col_c2 = st.columns([1.1, 0.9])
         
         with col_c1:
@@ -1895,10 +1884,8 @@ def render_model_comparison_page():
                 margin=dict(l=25, r=25, t=40, b=20)
             )
             st.plotly_chart(radar_fig, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with comp_tab2:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 🎯 Side-by-Side Confusion Matrices (All 4 Production Models)")
         
         cm_row1_c1, cm_row1_c2 = st.columns(2)
@@ -1964,10 +1951,8 @@ def render_model_comparison_page():
         > **{rec_winner_name}** is the strongest loss prevention engine, catching **{rec_winner_m['True_Positives']:,} defaults ({rec_winner_m['Recall_Default']*100:.1f}%)** on the holdout evaluation. 
         > **Logistic Regression** maintains **{lr_m['Specificity']*100:.1f}% specificity**, minimizing false alarms on safe applicants.
         """)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with comp_tab3:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 📈 Receiver Operating Characteristic (ROC) Benchmark")
         
         roc_fig = go.Figure()
@@ -1996,10 +1981,8 @@ def render_model_comparison_page():
             margin=dict(l=10, r=10, t=40, b=20)
         )
         st.plotly_chart(roc_fig, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with comp_tab4:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 🌳 Model Architecture Comparison: Tree-Based vs Instance vs Linear")
         
         m_c1, m_c2 = st.columns(2)
@@ -2043,10 +2026,8 @@ def render_model_comparison_page():
                     </ul>
                 </div>
             """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with comp_tab5:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### ⚔️ Interactive Live 4-Way Applicant Arena")
         st.markdown("Adjust hypothetical applicant attributes and watch all 4 models respond in real time.")
 
@@ -2121,7 +2102,6 @@ def render_model_comparison_page():
                     </div>
                 </div>
             """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     # Executive Strategy Guide (4 Columns)
     st.markdown("### 🏛️ Executive Underwriting Strategy Guide")
@@ -2187,7 +2167,6 @@ def render_batch_analytics_page():
         st.error("Models not ready for inference.")
         return
 
-    st.markdown('<div class="lg-card">', unsafe_allow_html=True)
     uploaded_file = st.file_uploader(
         "Upload Loan Application Batch (CSV format containing standard credit features)",
         type=["csv"],
@@ -2195,7 +2174,6 @@ def render_batch_analytics_page():
     )
     
     use_sample = st.checkbox("Or run live audit on sample test batch (1,500 representative loan records)", value=True if not uploaded_file else False)
-    st.markdown('</div>', unsafe_allow_html=True)
 
     batch_df = None
     if uploaded_file is not None:
@@ -2424,7 +2402,6 @@ def render_eda_page():
     ])
 
     with eda_tab1:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         
         with col1:
@@ -2470,10 +2447,8 @@ def render_eda_page():
                 margin=dict(l=10, r=10, t=40, b=20)
             )
             st.plotly_chart(fig_ir, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with eda_tab2:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         numeric_cols = FEATURE_NAMES + ["LoanDefault"]
         corr_matrix = df_eda[[c for c in numeric_cols if c in df_eda.columns]].corr().round(3)
 
@@ -2495,10 +2470,8 @@ def render_eda_page():
             margin=dict(l=10, r=10, t=40, b=20)
         )
         st.plotly_chart(fig_corr, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with eda_tab3:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         scatter_sample = df_eda.sample(min(2000, len(df_eda)), random_state=42)
         fig_scatter = px.scatter(
             scatter_sample,
@@ -2521,7 +2494,6 @@ def render_eda_page():
             margin=dict(l=10, r=10, t=40, b=20)
         )
         st.plotly_chart(fig_scatter, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
 # ============================================================
 # 9. PAGE 5: MODEL DIAGNOSTICS & ARCHITECTURE
@@ -2660,11 +2632,9 @@ def render_model_diagnostics_page():
             )
             st.plotly_chart(weight_fig, use_container_width=True)
 
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### 📐 Mathematical Formulation (Sigmoid Log-Odds)")
         st.latex(r"P(\text{Default} = 1) = \sigma(z) = \frac{1}{1 + e^{-z}}")
         st.latex(rf"z = {intercept:.4f} + \sum_{{i=1}}^{{11}} \beta_i \left(\frac{{X_i - \mu_i}}{{\sigma_i}}\right)")
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with diag_tab4:
         st.markdown("#### 🌲 Decision Tree Architecture & Hyperparameters")
@@ -2711,7 +2681,6 @@ def render_affordability_calculator_page():
     col1, col2 = st.columns([1.1, 0.9], gap="large")
 
     with col1:
-        st.markdown('<div class="lg-card">', unsafe_allow_html=True)
         st.markdown("#### ⚙️ Loan Offering Parameters")
         
         calc_loan = st.number_input("Proposed Principal ($)", min_value=5000, max_value=500000, value=100000, step=5000)
@@ -2720,7 +2689,6 @@ def render_affordability_calculator_page():
         calc_inc = st.number_input("Applicant Monthly Gross Income ($)", min_value=1000, max_value=50000, value=6500, step=250)
         calc_exist_debt = st.number_input("Existing Monthly Debt Commitments ($)", min_value=0, max_value=10000, value=900, step=100)
         
-        st.markdown('</div>', unsafe_allow_html=True)
 
     monthly_emi, total_pay, total_int = calculate_monthly_emi(calc_loan, calc_rate, calc_term)
     new_total_debt = calc_exist_debt + monthly_emi
@@ -2917,7 +2885,6 @@ def render_cross_validation_page():
                 </div>
             """, unsafe_allow_html=True)
 
-        st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
 
         # Dynamic Visualizations: Fold-by-Fold Bar Chart and Confusion Matrix
         viz_col1, viz_col2 = st.columns([3, 2])
@@ -3246,7 +3213,6 @@ def render_hyperparameter_tuning_page():
             </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
 
     # Best Parameter Combinations Discovered
     st.markdown("### 🏆 Optimal Hyperparameter Combinations Found")
@@ -3328,7 +3294,6 @@ def render_hyperparameter_tuning_page():
                 "Improved?": f"✅ YES (+{rand_imp['Delta_ROC_AUC']:.4f})"
             }
         ])
-        st.markdown("<div style='height: 35px;'></div>", unsafe_allow_html=True)
         st.dataframe(summary_df, use_container_width=True, hide_index=True)
 
     # Interactive Underwriting with Tuned Champion Model
